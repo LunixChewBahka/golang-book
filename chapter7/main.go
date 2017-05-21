@@ -96,6 +96,27 @@ func second() {
 	fmt.Println("2nd")
 }
 
+func makeOddGenerator() func() uint {
+	i := uint(1)
+	return func() (ret uint) {
+		ret = i
+		i += 2
+		return
+	}
+}
+
+func fib(xz int) int {
+	if xz < 0 {
+		panic("starting value should be 0")
+	} else if xz == 0 {
+		return 0
+	} else if xz == 1 {
+		return 1
+	} else {
+		return fib(xz-1) + fib(xz-2)
+	}
+}
+
 func main() {
 	// invoke / make use of the function
 	/*
@@ -215,7 +236,62 @@ func main() {
 	fmt.Println("Function Exercises (Answers):")
 	slc_sum := []float64{100, 200, 300, 400, 500, 600, 700, 800}
 	fmt.Println("Answer to number 1 is: ", answer_1(slc_sum))
+	//xx, yy := half(2)
+	//fmt.Printf("(%d, %s)\n", xx, yy)
+	fmt.Printf("\n")
+	fmt.Println("Answer to number 2 is: ")
+	numbers_list := []int{1, 2, 3, 4, 10, 20, 99}
+	half := func(x int) (int, bool) {
+		half := x / 2
+		mod_even := x%2 == 0
+		return half, mod_even
+	}
 
-	xx, yy := half(2)
-	fmt.Printf("(%d, %s)\n", xx, yy)
+	for _, val := range numbers_list {
+		h, me := half(val)
+		fmt.Println("Half:Parity of %d is %d: %t", val, h, me)
+	}
+
+	fmt.Printf("\n")
+	fmt.Println("Answer to number 3 is: ")
+	numbers_list2 := []int{55, 25, 10, -33, 125, 222, -3, 1, 98}
+	variadicParams := func(z []int) (int, int) {
+		// receives an int and returns an int
+		greatest, least := z[0], z[0]
+		for _, v := range z {
+			if v > greatest {
+				greatest = v
+			}
+			if v < least {
+				least = v
+			}
+		}
+		return greatest, least
+	}
+	g, l := variadicParams(numbers_list2)
+	fmt.Printf("Greatest # is : %d and Least # is : %d\n", g, l)
+
+	fmt.Printf("\n")
+	fmt.Println("Answer to number 4 is: ")
+	nextOdd := makeOddGenerator()
+	fmt.Println(nextOdd())
+	fmt.Println(nextOdd())
+	fmt.Println(nextOdd())
+	fmt.Println(nextOdd())
+	fmt.Println(nextOdd())
+
+	fmt.Printf("\n")
+	fmt.Println("Answer to number 5 is: ")
+	defer func() {
+		str := recover()
+		fmt.Println(str)
+	}()
+	for z := 0; z < 20; z++ {
+		fmt.Printf("%d", fib(z))
+		if z < 20 {
+			fmt.Printf(", ")
+		}
+	}
+	fmt.Println("")
+	fmt.Println(fib(100))
 }
